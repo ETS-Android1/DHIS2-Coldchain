@@ -54,6 +54,7 @@ import org.hisp.dhis.android.core.event.EventCreateProjection;
 import org.hisp.dhis.android.core.event.EventStatus;
 import org.hisp.dhis.android.core.maintenance.D2Error;
 import org.hisp.dhis.android.core.program.ProgramStageDataElement;
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeCollectionRepository;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -104,6 +105,14 @@ public class DeviceControlActivity extends AppCompatActivity {
 
     MyDatabaseHelper myDB;
     GraphView graphView;
+
+    String MozTEIuid = "pebsEKg891S";
+    String MozEnrollmentID ="eVwQptiLbqK";
+
+    private String mozEnrollmentID = "eVwQptiLbqK";
+    private String mozProgramID ="J3mQgSxGakP";
+    private String mozProgramStage ="wHK19rrcVBI";
+    private String mozOrgUnitId = "azEkexvj0fC";
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -232,7 +241,6 @@ public class DeviceControlActivity extends AppCompatActivity {
         ArrayList<Float> tempList = getCurrentTemp();
         //ArrayList<Date> dateList = getCaptureDateSorted();
 
-
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mBatteryLvl = (TextView) findViewById(R.id.battery_lvl);
 
@@ -290,10 +298,12 @@ public class DeviceControlActivity extends AppCompatActivity {
                 uploadClicked = true;
                 MyDatabaseHelper myDB = new MyDatabaseHelper(DeviceControlActivity.this);
                 if(connectedToNetwork){
-                    myDB.addTemperatures(device_name, current_Temp, max_Temp, min_Temp, average_last_24h);
-                    addEvent("g5oklCs7xIg","SDuMzcGLh8i","aecqgkE5quA", "iMDPax84iAN");
-                   // addEvent("g5oklCs7xIg","J3mQgSxGakP","wHK19rrcVBI", "iMDPax84iAN");
-                    Snackbar.make(v, "Adding temperature to database", Snackbar.LENGTH_LONG)
+                        myDB.addTemperatures(device_name, current_Temp, max_Temp, min_Temp, average_last_24h);
+                        addEvent(mozEnrollmentID,mozProgramID,mozProgramStage, mozOrgUnitId);
+                        // addEvent("g5oklCs7xIg","J3mQgSxGakP","wHK19rrcVBI", "iMDPax84iAN");
+                        Snackbar.make(v, "Adding temperature to database", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    Snackbar.make(v, "Wait for device to get temperature", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }else{
                     myDB.addTemperatures(device_name, current_Temp, max_Temp, min_Temp, average_last_24h);
@@ -301,6 +311,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                     Snackbar.make(v, "Adding temperature to database", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                graphView.onDataChanged(true, true);
                 System.out.println("-------------");
                 ArrayList<String> offList = myDB.returnAllOfflineData();
                     for (int i = 0; i < offList.size(); i++) {
@@ -346,12 +357,16 @@ public class DeviceControlActivity extends AppCompatActivity {
 
         displayBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                List<String> enrollments = Sdk.d2().trackedEntityModule().trackedEntityAttributes().blockingGetUids();
-                for (int i = 0; i < enrollments.size(); i++) {
-                    System.out.println("-----------_____----------");
-                    System.out.println(enrollments.get(i));
-                    System.out.println("-----------_____----------");
+                System.out.println("-------------");
+                List<String> teiUids = getTeiUids();
+                for(int i = 0; i < teiUids.size(); i++){
+                    System.out.println("TEIUIDS :: " + teiUids.get(i));
                 }
+                List<Enrollment> enrollmentID = getEnrollmentIds(MozTEIuid);
+                for(int i = 0; i < enrollmentID.size(); i++){
+                    System.out.println("EnrollmentUIDS :: " + enrollmentID.get(i));
+                }
+                System.out.println("-------------");
                 AlertDialog.Builder alert = new AlertDialog.Builder(DeviceControlActivity.this);
                 final EditText edittext = new EditText(DeviceControlActivity.this);
                 alert.setTitle("Database");
@@ -518,7 +533,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     MyDatabaseHelper myDB = new MyDatabaseHelper(DeviceControlActivity.this);
                     myDB.addTemperatures(device_name, current_Temp, max_Temp, min_Temp, average_last_24h);
-                    addEvent("g5oklCs7xIg","SDuMzcGLh8i","aecqgkE5quA", "iMDPax84iAN");
+                    addEvent(mozEnrollmentID,mozProgramID,mozProgramStage, mozOrgUnitId);
                     Snackbar.make(v, "Adding temperature DHIS2", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     }
@@ -711,7 +726,7 @@ public class DeviceControlActivity extends AppCompatActivity {
             Date date = format.parse (dateString);
 
             Sdk.d2().eventModule().events().uid(eventUid).setEventDate(date);
-            Sdk.d2().enrollmentModule().enrollments().uid("g5oklCs7xIg").setEnrollmentDate(date);
+            Sdk.d2().enrollmentModule().enrollments().uid(mozEnrollmentID).setEnrollmentDate(date);
             Sdk.d2().eventModule().events().uid(eventUid).setCompletedDate(date);
 
 
@@ -721,7 +736,7 @@ public class DeviceControlActivity extends AppCompatActivity {
             ) {
                 for (int i = 0; i < dbResult.size() ; i++) {
                     Sdk.d2().trackedEntityModule().trackedEntityDataValues().value(eventUid, elem.dataElement().uid()).blockingSet(dbResult.get(i).substring(0,4));
-                    System.out.println(Sdk.d2().trackedEntityModule().trackedEntityDataValues().value(eventUid, elem.dataElement().uid()).blockingGet());
+                    System.out.println("HERE _________-------------_________: " + Sdk.d2().trackedEntityModule().trackedEntityDataValues().value(eventUid, elem.dataElement().uid()).blockingGet());
                 }
             }
 
@@ -733,7 +748,17 @@ public class DeviceControlActivity extends AppCompatActivity {
             d2Error.printStackTrace();
         }
     }
+    private List<String> getTeiUids(){
+        return Sdk.d2().trackedEntityModule().trackedEntityInstances().blockingGetUids();
+    }
 
+    private  List<String> getOrgIDs(){
+        return Sdk.d2().organisationUnitModule().organisationUnits().blockingGetUids();
+    }
+
+    private List<Enrollment> getEnrollmentIds(String testTeiUid){
+        return Sdk.d2().enrollmentModule().enrollments().byTrackedEntityInstance().eq(testTeiUid).blockingGet();
+    }
     private ArrayList<String> getDbResult(){
         myDB = new MyDatabaseHelper(DeviceControlActivity.this);
         //return myDB.returnCurrentTemp();

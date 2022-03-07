@@ -107,10 +107,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int ACCESS_FINE_LOCATION_PERMISSION = 85;
     // Stops scanning after 6 seconds.
-    private static final long SCAN_PERIOD = 6000;
+    private static final long SCAN_PERIOD = 4000;
 
     private Boolean connectedToNetwork = false;
 
+    private String MozTeiDirre ="pebsEKg891S";
+
+    private String mozEnrollmentID = "eVwQptiLbqK";
+    private String mozProgramID ="J3mQgSxGakP";
+    private String mozProgramStage ="wHK19rrcVBI";
+    private String mozOrgUnitId = "azEkexvj0fC";
+
+    private String norEnrollemntId = "g5oklCs7xIg";
+    private String norProgram = "SDuMzcGLh8i";
+    private String norProgramStage ="aecqgkE5quA";
+    private String norOrgUnitId ="iMDPax84iAN";
     public static Intent getMainActivityIntent(Context context) {
         return new Intent(context, MainActivity.class);
     }
@@ -371,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ArrayList<String> offList = myDB.returnAllOfflineData();
             if(!offList.isEmpty()){
                 //Makes events from the offline DB
-                addEventsFromOfflineDB("g5oklCs7xIg","SDuMzcGLh8i","aecqgkE5quA", "iMDPax84iAN");
+                addEventsFromOfflineDB(mozEnrollmentID,mozProgramID,mozProgramStage, mozOrgUnitId);
                 //After events are made sanitizes the offline db
                 myDB.deleteAllOfflineData();
             }
@@ -405,8 +416,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Date date = format.parse (dateString);
 
                 Sdk.d2().eventModule().events().uid(eventUid).setEventDate(date);
-                //ENROLLMENT ---  TRACKEDERID
-                Sdk.d2().enrollmentModule().enrollments().uid("R37JpL089kI").setEnrollmentDate(date);
+                //ENROLLMENT ---  EnrollmentID
+                Sdk.d2().enrollmentModule().enrollments().uid(mozEnrollmentID).setEnrollmentDate(date);
                 Sdk.d2().eventModule().events().uid(eventUid).setCompletedDate(date);
 
 
@@ -543,7 +554,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void uploadData() {
         if(Sdk.d2().eventModule() == null){
           System.out.println("There are no Events to upload");
-          //for (each item in db - make event and upload)
         }
         else{
         compositeDisposable.add(
