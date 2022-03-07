@@ -133,6 +133,10 @@ public class LoginActivity extends AppCompatActivity {
             if(wifiConnected || mobileConnected){
                 login();
             }else{
+                checkNetworkConnection();
+                if(wifiConnected || mobileConnected){
+                    login();
+                }
             Toast.makeText(this, "Connect to WIFI or Mobile data to log in", Toast.LENGTH_SHORT).show();
             }
         });

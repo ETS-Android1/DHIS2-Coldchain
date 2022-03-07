@@ -12,9 +12,14 @@
     <string name="login_failed">"Login failed"</string>
     <!-- Strings related to autoFill -->
     <string name="auto_fill_url">"https://lmis.integration.dhis2.org/cce/"</string>
-    <string name="auto_fill_username">"admin"</string>
-    <string name="auto_fill_password">"ColdChainEquipment123!"</string>
-    <!-- Strings related to Chold Chain -->
+       <string name="auto_fill_username">"admin"</string>
+       <string name="auto_fill_password">"ColdChainEquipment123!"</string>
+    <!--
+       <string name="auto_fill_url">"https://sis.misau.gov.mz/survey/"</string>
+       <string name="auto_fill_username">"uio"</string>
+       <string name="auto_fill_password">"uio4Ever!"</string>
+        -->
+       <!-- Strings related to Chold Chain -->
     <string name="title_activity_coldChain" >"Cold chain"</string>
     <string name="content_cold_chain" >"Hello This is the activity"</string>
     <!-- Strings related to list item -->

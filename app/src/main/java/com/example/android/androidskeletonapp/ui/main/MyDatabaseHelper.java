@@ -128,24 +128,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
         return cursor;
     }
 
-    // TO-DO make it possible to check for duplicates on UUID
-   /* public Boolean checkForDuplicates(String uuid){
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + UNIQUE_ID + " =capture_uuid" ;
-        SQLiteDatabase db = this.getReadableDatabase();
-        if(db != null){
-            Cursor cursor = db.rawQuery(query, null);
-            while (cursor.moveToNext()){
-                if(cursor.getString(7).equals(uuid)){
-                    return  true;
-                }
-            }
-        }
-        return false;
-    };
-
-    */
-
-
     public ArrayList<String> returnCurrentTemp(){
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_CURRENT_TEMP + " =current_temperature" ;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -191,6 +173,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
         }
         return Db_data;
     };
+
     //For offline database
     public ArrayList<String> returnAvgTemps_offline(){
         String query = "SELECT * FROM " + OFFLINE_TABLE_NAME + " WHERE " +  OFFLINE_COLUMN_AVG_TEMP + " =avg_temperature" + " AND " + OFFLINE_COLUMN_MAX_TEMP + "=max_temperature" + " AND " + OFFLINE_COLUMN_MIN_TEMP + "=min_temperature";

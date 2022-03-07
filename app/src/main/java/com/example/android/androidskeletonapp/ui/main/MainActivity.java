@@ -405,7 +405,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Date date = format.parse (dateString);
 
                 Sdk.d2().eventModule().events().uid(eventUid).setEventDate(date);
-                Sdk.d2().enrollmentModule().enrollments().uid("g5oklCs7xIg").setEnrollmentDate(date);
+                //ENROLLMENT ---  TRACKEDERID
+                Sdk.d2().enrollmentModule().enrollments().uid("R37JpL089kI").setEnrollmentDate(date);
                 Sdk.d2().eventModule().events().uid(eventUid).setCompletedDate(date);
 
 
@@ -623,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (!mLeDevices.contains(device)) {
                                 // Filters out other devices
                                 // TO-DO make it generic for BM devices
-                                if (device.getAddress().startsWith("CC:98:A3") || device.getAddress().startsWith("C2:1C:80") || device.getAddress().startsWith("E3:8C:93:AA") || device.getAddress().startsWith("D6:70:D8")|| device.getAddress().startsWith("F1:78:D6") || device.getAddress().startsWith("D0:5A:3A")|| device.getAddress().startsWith("F5:2C:3F")){
+                                if (device.getAddress().startsWith("CC:98:A3") || device.getAddress().startsWith("C2:1C:80") || device.getAddress().startsWith("E3:8C:93:AA") || device.getAddress().startsWith("D6:70:D8")|| device.getAddress().startsWith("F1:78:D6") || device.getAddress().startsWith("D0:5A:3A")|| device.getAddress().startsWith("F5:2C:3F") || device.getAddress().startsWith("DD:94:DF")|| device.getAddress().startsWith("FC:50:2F")|| device.getAddress().startsWith("DA:3A:71")|| device.getAddress().startsWith("DA:33:CE")|| device.getAddress().startsWith("F8:DD:CC")|| device.getAddress().startsWith("CA:54:66")|| device.getAddress().startsWith("F4:C0:DD")|| device.getAddress().startsWith("DF:6B:BE")){
                                     mLeDevices.add(device);
                                 }
                             }

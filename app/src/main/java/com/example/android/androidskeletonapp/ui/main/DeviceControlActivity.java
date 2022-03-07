@@ -43,11 +43,13 @@ import com.example.android.androidskeletonapp.data.Sdk;
 import com.example.android.androidskeletonapp.data.service.ActivityStarter;
 import com.example.android.androidskeletonapp.ui.cold_chain.ColdChain;
 import com.example.android.androidskeletonapp.ui.login.LoginActivity;
+import com.example.android.androidskeletonapp.ui.tracked_entity_instances.search.TrackedEntityAttributesFieldHolder;
 import com.google.android.material.snackbar.Snackbar;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.event.EventCreateProjection;
 import org.hisp.dhis.android.core.event.EventStatus;
 import org.hisp.dhis.android.core.maintenance.D2Error;
@@ -290,6 +292,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                 if(connectedToNetwork){
                     myDB.addTemperatures(device_name, current_Temp, max_Temp, min_Temp, average_last_24h);
                     addEvent("g5oklCs7xIg","SDuMzcGLh8i","aecqgkE5quA", "iMDPax84iAN");
+                   // addEvent("g5oklCs7xIg","J3mQgSxGakP","wHK19rrcVBI", "iMDPax84iAN");
                     Snackbar.make(v, "Adding temperature to database", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }else{
@@ -343,6 +346,12 @@ public class DeviceControlActivity extends AppCompatActivity {
 
         displayBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                List<String> enrollments = Sdk.d2().trackedEntityModule().trackedEntityAttributes().blockingGetUids();
+                for (int i = 0; i < enrollments.size(); i++) {
+                    System.out.println("-----------_____----------");
+                    System.out.println(enrollments.get(i));
+                    System.out.println("-----------_____----------");
+                }
                 AlertDialog.Builder alert = new AlertDialog.Builder(DeviceControlActivity.this);
                 final EditText edittext = new EditText(DeviceControlActivity.this);
                 alert.setTitle("Database");
@@ -593,17 +602,13 @@ public class DeviceControlActivity extends AppCompatActivity {
         String s;
         if(temp.contains("-")){
             s = temp.substring(0,4);
-            System.out.println(temp);
         }
         else if(temp.length() < 5){
             s = temp.substring(0,3);
-            System.out.println(s);
         }else{
             s = temp.substring(0,4);
-            System.out.println(s);
         }
         float f = Float.parseFloat(s);
-        System.out.println(f);
         if(f <= 0){
             tv.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }else{
